@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Comments{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<a class="action" href="{{ url_for('forum.index') }}">Home</a>
+    {% for comment in comments %}
+    <article class="post">
+        <header>
+          <div>
+            <div class="about">by {{ comment['body'] }} </div>
+          </div>
+        </header>
+      </article>
+    {% endfor %}
+{% endblock %}

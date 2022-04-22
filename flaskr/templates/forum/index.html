@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Forums{% endblock %}</h1>
+  <h1>
+    {% block title %}
+      Forums 
+      <a class="action" href="{{ url_for('forum.profile', id=g.user['id']) }}">Profile</a>
+    {% endblock %}</h1>
   {% if g.user %}
     <a class="action" href="{{ url_for('forum.create') }}">New</a>
   {% endif %}
@@ -10,6 +14,7 @@
 {% block content %}
   {% for forum in forums %}
     <article class="post">
+      <h1> forum_id: {{forum['id']}} </h1>
       <header>
         <div>
           <h1>{{ forum['title'] }}</h1>
@@ -21,6 +26,10 @@
       </header>
       <p class="body">{{ forum['body'] }}</p>
     </article>
+    <div>
+      <a class="action" href="{{ url_for('forum.get_comment', id=forum['id']) }}">Comments</a>
+       <a class="action" href="{{ url_for('forum.comment', id=forum['id']) }}">Comments Write</a>
+    </div> 
     {% if not loop.last %}
       <hr>
     {% endif %}

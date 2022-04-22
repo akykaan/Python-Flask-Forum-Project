@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Comment </h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+      <label for="body">Body</label>
+      <textarea name="body" id="body">{{ request.form['body']}}</textarea>
+      <input type="submit" value="Save">
+    </form>
+    <hr>
+  
+{% endblock %}

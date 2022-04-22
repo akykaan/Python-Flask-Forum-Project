@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
@@ -8,14 +9,19 @@ from flaskr.db import get_db
 
 bp = Blueprint('forum', __name__)
 
+@bp.route('/<int:id>/profile',methods=('GET','POST'))
+def profile(id):
+    return render_template('profile/profile.html',ids=id)
+
 @bp.route('/index')
 def index():
     db = get_db()
     forums = db.execute(
         'SELECT f.id,user_id,created,title,body'
-        ' FROM forum f JOIN user u ON f.user_id = u.id'
+        ' FROM forum f '
         ' ORDER BY created DESC'
     ).fetchall()
+
     return render_template('forum/index.html',forums=forums)
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -34,13 +40,12 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO forum (title, body, user_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
+                'INSERT INTO forum (title, body, user_id,is_active)'
+                ' VALUES (?, ?, ?,?)',
+                (title, body, g.user['id'],True)
             )
             db.commit()
             return redirect(url_for('forum.index'))
-
     return render_template('forum/create.html')
 
 def get_forum(id, check_author=True):
@@ -58,6 +63,21 @@ def get_forum(id, check_author=True):
         abort(403)
 
     return forum
+
+
+@bp.route('/<int:id>/get_comment',methods=('GET','POST'))
+def get_comment(id):
+    db=get_db()      
+    comments=db.execute(
+        'SELECT c.body'
+        ' FROM comment c INNER JOIN user u ON u.id=f.user_id'
+        ' INNER JOIN forum f ON f.id=c.forum_id'
+        ' WHERE c.forum_id = ?'
+        ' ORDER BY c.id DESC',
+        (id,)
+    ).fetchall()
+    
+    return render_template('forum/get_comment.html',comments=comments)
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
@@ -94,3 +114,27 @@ def delete(id):
     db.execute('DELETE FROM forum WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('forum.index'))
+
+@bp.route('/<int:id>/comment',methods=['GET','POST'])
+@login_required
+def comment(id):
+    if request.method == 'POST':
+        body = request.form['body']
+        created=datetime.now().strftime('%Y-%m-%d')
+        error = None
+        
+        if not body:
+            error = 'Body is required.'
+
+        if error is not None:
+            flash(error)
+        else:
+            db=get_db()
+            db.execute(
+                'INSERT INTO comment(user_id,forum_id,created,body)'
+                ' VALUES(?,?,?,?)',
+                (g.user['id'],id,created,body)
+            )
+            db.commit()
+            return redirect(url_for('forum.index'))
+    return render_template('forum/comment.html')
