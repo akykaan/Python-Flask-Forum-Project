@@ -27,14 +27,11 @@ CREATE TABLE comment(
   FOREIGN KEY (forum_id) REFERENCES forum(id)
 );
 
-CREATE TABLE profile (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  profile_id INTEGER NOT NULL,
-  FOREIGN KEY (profile_id) REFERENCES user (id)
-);
-
 CREATE TABLE moderator (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nickname TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  authority TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user(id)
 );

@@ -43,6 +43,7 @@ def login():
     if request.method == 'POST':
         nickname = request.form['nickname']
         password = request.form['password']
+        
         db = get_db()
         error = None
         user = db.execute(
@@ -60,12 +61,8 @@ def login():
             return redirect(url_for('forum.index'))
 
         flash(error)
-
     return render_template('auth/login.html')
 
-@bp.route('/index')
-def index():
-    return render_template('forum/index.html')
 
 @bp.before_app_request
 def load_logged_in_user():

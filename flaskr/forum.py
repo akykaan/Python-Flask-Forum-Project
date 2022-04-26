@@ -7,17 +7,31 @@ from werkzeug.exceptions import abort
 from flaskr.auth import login_required
 from flaskr.db import get_db
 
-bp = Blueprint('forum', __name__)
+bp = Blueprint('forum',__name__)
 
-@bp.route('/<int:id>/profile',methods=('GET','POST'))
+@bp.route('/<int:id>/user_profile',methods=('GET','POST'))
 def profile(id):
-    return render_template('profile/profile.html',ids=id)
+    db = get_db()
+    users = db.execute(
+        'SELECT id,nickname,password'
+        ' FROM user u'
+        ' WHERE u.id = ?',
+        (id,)
+    ).fetchall()
+
+    forums = db.execute(
+        'SELECT f.title,f.body'
+        ' FROM forum f JOIN user u ON f.user_id = u.id'
+        ' WHERE u.id = ?',
+        (id,)
+    ).fetchall()
+    return render_template('profile/index.html',users=users,forums=forums)
 
 @bp.route('/index')
 def index():
     db = get_db()
     forums = db.execute(
-        'SELECT f.id,user_id,created,title,body'
+        'SELECT f.id,user_id,created,title,body,is_active'
         ' FROM forum f '
         ' ORDER BY created DESC'
     ).fetchall()
@@ -138,3 +152,15 @@ def comment(id):
             db.commit()
             return redirect(url_for('forum.index'))
     return render_template('forum/comment.html')
+
+@bp.route('/<int:id>/close_comment',methods=['GET'])
+def close_comment(id):
+    db = get_db()
+    db.execute(
+        'UPDATE forum set is_active = 0'
+        ' WHERE forum.id=?',
+        (id,)
+    ).fetchone()
+    db.commit()
+    return redirect(url_for('forum.index'))
+

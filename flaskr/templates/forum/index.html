@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>
     {% block title %}
       Forums 
-      <a class="action" href="{{ url_for('forum.profile', id=g.user['id']) }}">Profile</a>
-    {% endblock %}</h1>
+    {% endblock %}
+    <a class="action" href="{{ url_for('forum.profile', id=g.user['id'])  }}">Profile</a>
   {% if g.user %}
     <a class="action" href="{{ url_for('forum.create') }}">New</a>
   {% endif %}
@@ -15,6 +14,7 @@
   {% for forum in forums %}
     <article class="post">
       <h1> forum_id: {{forum['id']}} </h1>
+      <h1> is_close: {{forum['is_active']}} </h1>
       <header>
         <div>
           <h1>{{ forum['title'] }}</h1>
@@ -28,7 +28,13 @@
     </article>
     <div>
       <a class="action" href="{{ url_for('forum.get_comment', id=forum['id']) }}">Comments</a>
-       <a class="action" href="{{ url_for('forum.comment', id=forum['id']) }}">Comments Write</a>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        {% if forum['is_active']==1 %}
+          <a class="action" href="{{ url_for('forum.comment', id=forum['id']) }}">Comments Write</a>
+        {% endif %}
+        {% if g.user['id']==forum['user_id'] %}
+          <a class="action" id="close" href="{{ url_for('forum.close_comment', id=forum['id']) }}"  >Close to comments</a>
+        {% endif %}  
     </div> 
     {% if not loop.last %}
       <hr>
