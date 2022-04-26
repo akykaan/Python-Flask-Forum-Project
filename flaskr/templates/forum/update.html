@@ -7,14 +7,16 @@
 {% block content %}
   <form method="post">
     <label for="title">Title</label>
-    <input name="title" id="title"
-      value="{{ request.form['title'] or forum['title'] }}" required>
-    <label for="body">Body</label>
-    <textarea name="body" id="body">{{ request.form['body'] or forum['body'] }}</textarea>
-    <input type="submit" value="Save">
+    <div class="mb-3">
+      <input name="title" id="title" value="{{ request.form['title'] or forum['title'] }}" required>
+      <label for="body" class="form-label">Content</label>
+      <textarea class="form-control" name="body" id="body" rows="3">{{ request.form['body'] or forum['body'] }}</textarea>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Save">
   </form>
   <hr>
   <form action="{{ url_for('forum.delete', id=forum['id']) }}" method="post" >
-    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+    <input class="btn btn-danger" type="submit" value="Delete" onclick="return confirm('Do you want to delete this forum?');">
   </form>
+
 {% endblock %}

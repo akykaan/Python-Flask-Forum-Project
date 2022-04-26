@@ -1,44 +1,64 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    {% block title %}
-      Forums 
-    {% endblock %}
-    <a class="action" href="{{ url_for('forum.profile', id=g.user['id'])  }}">Profile</a>
+    <link rel="stylesheet" href="{{ url_for('static', filename='forum.css') }}" />
+  {% block title %} {% endblock %}
+    <!-- <a class="action" href="{{ url_for('forum.profile', id=g.user['id'])  }}">Profile</a>--> 
   {% if g.user %}
-    <a class="action" href="{{ url_for('forum.create') }}">New</a>
+    <!-- <a class="action" href="{{ url_for('forum.create') }}">New</a>--> 
   {% endif %}
 {% endblock %}
 
-{% block content %}
-  {% for forum in forums %}
-    <article class="post">
-      <h1> forum_id: {{forum['id']}} </h1>
-      <h1> is_close: {{forum['is_active']}} </h1>
-      <h1> authority: {{g.user['authority']}} </h1>
-      <header>
-        <div>
-          <h1>{{ forum['title'] }}</h1>
-          <div class="about">by {{ forum['username'] }} on {{ forum['created'].strftime('%Y-%m-%d') }}</div>
+{% block content %} 
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="wrapper wrapper-content animated fadeInRight">
+          <div class="ibox-content m-b-sm border-bottom">
+            <div class="d-flex bd-highlight mb-3">
+              <div class="p-2 bd-highlight"><h1 class="display-3"> Foruma Hoş geldiniz.</h1></div>
+              <div class="ms-auto p-2 bd-highlight">
+                <a class="btn btn-primary" href="{{ url_for('forum.profile', id=g.user['id'])  }}"> Profile</a>
+                {% if g.user %}
+                  <a class="btn btn-primary" href="{{ url_for('forum.create') }}"> New</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="ibox-content forum-container">
+            <div class="forum-title">
+              <h3> Başlıklar</h3>
+            </div>
+            <div class="forum-item active">
+              <div class="row">
+                <div class="col-md-9">
+                  {% for forum in forums %}
+                    <i class="fa fa-book"><h4 class="body forum-item-title">{{ forum['title'] }}</h4></i>
+                    <div class="forum-sub-title">Written by {{ g.user['nickname'] }} on {{ forum['created'].strftime('%Y-%m-%d') }}</div>
+                    {% if g.user['id'] == forum['user_id'] or g.user['authority']==1 %}
+                      <a class="fa fa-pencil-square-o " href="{{ url_for('forum.update', id=forum['id']) }}"> Edit</a>
+                    {% endif %}
+                    <p class="body forum-item-title"> {{ forum['body'] }}</p>
+                    <div>
+                      <a class="fa fa-comment" href="{{ url_for('forum.get_comment', id=forum['id']) }}"> Comments</a>
+                      {% if forum['is_active']==1 %}
+                        <a class="fa fa-pencil-square-o" href="{{ url_for('forum.comment', id=forum['id']) }}"> Comments Write</a>
+                      {% endif %}
+                      {% if g.user['id']==forum['user_id'] or g.user['authority']==1 %}
+                        <a class="fa fa-times-circle" id="close" href="{{ url_for('forum.close_comment', id=forum['id']) }}"> Close to comments</a>
+                      {% endif %}
+                    </div> 
+                      {% if not loop.last %}
+                      <hr />
+                    {% endif %}
+                  {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        {% if g.user['id'] == forum['user_id'] or g.user['authority']==1 %}
-          <a class="action" href="{{ url_for('forum.update', id=forum['id']) }}">Edit</a>
-        {% endif %}
-      </header>
-      <p class="body">{{ forum['body'] }}</p>
-    </article>
-    <div>
-      <a class="action" href="{{ url_for('forum.get_comment', id=forum['id']) }}">Comments</a>
-      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        {% if forum['is_active']==1 %}
-          <a class="action" href="{{ url_for('forum.comment', id=forum['id']) }}">Comments Write</a>
-        {% endif %}
-        {% if g.user['id']==forum['user_id'] or g.user['authority']==1 %}
-          <a class="action" id="close" href="{{ url_for('forum.close_comment', id=forum['id']) }}"  >Close to comments</a>
-        {% endif %}  
-    </div> 
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
-  {% endfor %}
+      </div>
+    </div>
 {% endblock %}

@@ -16,13 +16,12 @@ def register():
         password = request.form['password']
         db = get_db()
         error = None
-        print(nickname)
-        print(password)
         if not nickname:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
 
+        # üye olurken verilen nickname va password'ü alır ve password'ü hashler     
         if error is None:
             try:
                 db.execute(
@@ -53,9 +52,10 @@ def login():
 
         if user is None:
             error = 'Incorrect nickname.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user['password'], password): 
             error = 'Incorrect password.'
 
+        # giriş yaparken db'de kayıtlı olan hashlı şifre ile girilen şifre aynı mı diye bakar 
         if error is None:
             session.clear()
             session['user_id'] = user['id']
@@ -67,7 +67,7 @@ def login():
 
 @bp.before_app_request
 def load_logged_in_user():
-    user_id = session.get('user_id')
+    user_id = session.get('user_id') # session bilgisi olan kullanıcı dbden çeker 
 
     if user_id is None:
         g.user = None
@@ -79,7 +79,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('auth.login')) # siteden çıkış işlemleri session bilgisi kesilir 
 
 def login_required(view):
     @functools.wraps(view)

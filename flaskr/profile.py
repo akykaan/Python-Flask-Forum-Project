@@ -14,10 +14,13 @@ from flaskr.db import get_db
 
 bp = Blueprint('profile',__name__)
 
+# profil sayfası açılın kısmı
 @bp.route('/index')
 def profile():
-    return render_template('profile/profile.html')
+    return render_template('profile/profile.html') 
 
+
+### Kişiye özel profil sayfası editleme işlemi
 @bp.route('/<int:id>/edit',methods=('GET','POST'))
 def edit(id):
     if request.method == 'POST':
@@ -25,10 +28,11 @@ def edit(id):
         password = request.form['password']
         error = None
 
+        
         if not nickname and password:
             error = 'nickname and password is required.'
         if nickname=="" and password=="":
-            return redirect(url_for('profile.profile')) 
+            return redirect(url_for('profile.profile')) # 2 alan birden boş ile bizi tekrar aynı sayfaya atar
 
         if error is not None:
             flash(error)

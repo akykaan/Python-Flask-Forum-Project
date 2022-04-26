@@ -1,16 +1,45 @@
 {% extends 'base.html' %}
-
 {% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
-  
-{% endblock %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='signin.css') }}" />
+{% endblock %} 
 
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="nickname" id="nickname" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
-  </form>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h2 class="text-center text-dark mt-5">Login Form</h2>
+      <div class="card my-5">
+        <form method="post" class="card-body cardbody-color p-lg-5">
+          <div class="mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="nickname"
+              name="nickname"
+              placeholder="Nickname"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="password"
+              required
+            />
+          </div>
+          <div class="text-center">
+            <input type="submit" class="btn btn-color px-5 mb-5 w-100" value="Login">
+          </div>
+          <div class="form-text text-center mb-5 text-dark">
+            Not Registered?
+            <a href="{{ url_for('auth.register')  }}" class="text-dark fw-bold"> Create an Account</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

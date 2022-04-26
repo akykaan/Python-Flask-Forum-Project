@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Comments{% endblock %}</h1>
+  <h1 class="container">{% block title %}Comments{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-<a class="action" href="{{ url_for('forum.index') }}">Home</a>
+<a class="btn btn-primary" href="{{ url_for('forum.index') }}">Home</a>
     {% for comment in comments %}
-    <article class="post">
-        <header>
-          <div>
-            <div class="about">{{g.user['nickname']}} by {{ comment['body'] }} </div>
-            <a class="action" href="{{ url_for('forum.comment_delete', id=comment['id']) }}">Delete</a>
-            <a class="action" href="{{ url_for('forum.comment_edit', id=comment['id']) }}">Edit</a>
-          </div>
-        </header>
-      </article>
+  <article class="post mt-4">
+    <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+        <div class="d-flex w-100 justify-content-between"> 
+          <h5 class="mb-1">{{ comment['body'] }}</h5>
+          <hr />
+          <span>Written by {{g.user['nickname']}} </span>
+        </div>
+        <p class="mb-1"><a href="{{ url_for('forum.comment_delete', id=comment['id']) }}">Delete</a></p>
+        <p class="mb-1"><a href="{{ url_for('forum.comment_edit', id=comment['id']) }}">Edit</a></p>
+      </a>
+    </div>
+  </article>
     {% endfor %}
 {% endblock %}

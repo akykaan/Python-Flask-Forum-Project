@@ -2,23 +2,52 @@
 
 {% block header %}
     {% block title %}
-        Forums 
+         
     {% endblock %}
-    <a class="action" href="{{ url_for('profile.edit', id=g.user['id']) }}">Edit</a>
 {% endblock %}
 
 {% block content %}
 <h1> Profile Sayfası </h1>
 <h2>Profil Bilgileri</h2>
     {% for user in users %}
-        <p class="body">id: {{ user['id'] }}</p>
-        <p class="body">nickname: {{ user['nickname'] }}</p>
-        <p class="body">password: {{ user['password'] }}</p>
-    {% endfor %}
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+                <div class="well well-sm">
+                    <div class="row">
+                        
+                        <div class="col-sm-6 col-md-8">
+                            <h4>
+                                Nickname: {{ user['nickname'] }}
+                            </h4>
+                            Profili Editle <a class="action btn btn-primary" href="{{ url_for('profile.edit', id=g.user['id']) }}">Edit</a>
 
-    <h2>Açılan Forum Başlıkları</h2>
-    {% for forum in forums %}
-        <p class="body">Forum Sayfasının başlığı: {{ forum['title'] }}</p>
-        <p class="body">Sayfanın içeriği: {{ forum['body'] }}</p>
-    {% endfor %}
+                            {% endfor %}
+                        <p>
+                            <h2>Açılan Forum Başlıkları</h2>
+                            {% for forum in forums %}
+                                <div class="p-3 mb-2 bg-secondary text-white">
+                                    <p class="body"> Forum Sayfasının başlığı: {{ forum['title'] }}</p>
+                                    <p class="body"> Sayfanın içeriği: {{ forum['body'] }}</p>
+                                </div>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}

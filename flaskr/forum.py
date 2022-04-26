@@ -9,6 +9,8 @@ from flaskr.db import get_db
 
 bp = Blueprint('forum',__name__)
 
+
+
 @bp.route('/<int:id>/user_profile',methods=('GET','POST'))
 def profile(id):
     db = get_db()
@@ -27,6 +29,8 @@ def profile(id):
     ).fetchall()
     return render_template('profile/index.html',users=users,forums=forums)
 
+
+# Tüm girilen forum başlıklarını sql sorgusu ile listelemiş olduk.
 @bp.route('/index')
 def index():
     db = get_db()
@@ -38,16 +42,18 @@ def index():
 
     return render_template('forum/index.html',forums=forums)
 
+
+# Forumda yeni bir başlık açmak için
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
-    if request.method == 'POST':
+    if request.method == 'POST': # İlk Sayfa açıldığında post işlemi olmayacak ve render_template çalışacak
         title = request.form['title']
         body = request.form['body']
         error = None
 
         if not title:
-            error = 'Title is required.'
+            error = 'Title is required.'  
 
         if error is not None:
             flash(error)
@@ -59,10 +65,10 @@ def create():
                 (title, body, g.user['id'],True)
             )
             db.commit()
-            return redirect(url_for('forum.index'))
+            return redirect(url_for('forum.index')) # Post işleminden sonra bizi index fonksiyonuna gönderir ve açılan başlığı görmüş oluruz.
     return render_template('forum/create.html')
 
-def get_forum(id, check_author=True):
+def get_forum(id, check_author=True):   # Verilen id ile ilgini forumun bilgilerini almak için 
     forum = get_db().execute(
         'SELECT f.id,user_id,created,title,body'
         ' FROM forum f JOIN user u ON f.user_id = u.id'
@@ -72,7 +78,7 @@ def get_forum(id, check_author=True):
 
     if forum is None:
         abort(404, f"Forum id {id} doesn't exist.")
-    if g.user['authority']==1:
+    if g.user['authority']==1:  # Database kısmında yetkisi 1 ile işaretlenen kişiler tüm yetkilere sahiptir.
         return forum
     if check_author and forum['user_id'] != g.user['id']:
         abort(403)
@@ -80,8 +86,8 @@ def get_forum(id, check_author=True):
     return forum
 
 
-@bp.route('/<int:id>/get_comment',methods=('GET','POST'))
-def get_comment(id):
+@bp.route('/<int:id>/get_comment',methods=('GET','POST')) # Forumun sahip olduğu yorumları getirmek için 
+def get_comment(id): # id ile hangi forumun yorumlarına gidildi onu öğrendik.
     db=get_db()      
     comments=db.execute(
         'SELECT c.body,c.forum_id,c.id'
@@ -89,7 +95,7 @@ def get_comment(id):
         ' INNER JOIN forum f ON f.id=c.forum_id'
         ' WHERE c.forum_id = ?'
         ' ORDER BY c.id DESC',
-        (id,)
+        (id,) # id'yi burada kullanıp sql sorgusu ile çektik.
     ).fetchall()
     
     return render_template('forum/get_comment.html',comments=comments)
@@ -97,7 +103,7 @@ def get_comment(id):
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
-    forum = get_forum(id)
+    forum = get_forum(id)  # Önce hangi forum başlığı ve içeriği güncellenmeli onu get_forum ile belirledik.
 
     if request.method == 'POST':
         title = request.form['title']
@@ -114,7 +120,7 @@ def update(id):
             db.execute(
                 'UPDATE forum SET title = ?, body = ?'
                 ' WHERE id = ?',
-                (title, body, id)
+                (title, body, id) # Belirlenen id'yi sql update ile kullanarak içeriğin değişmesini sağladık
             )
             db.commit()
             return redirect(url_for('forum.index'))
@@ -123,7 +129,7 @@ def update(id):
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
-def delete(id):
+def delete(id):  # Silinmesini istediğimiz forum'un id'sini buraya yollayıp onu sql komutu ile sildik
     get_forum(id)
     db = get_db()
     db.execute('DELETE FROM forum WHERE id = ?', (id,))
@@ -133,8 +139,8 @@ def delete(id):
 @bp.route('/<int:id>/comment',methods=['GET','POST'])
 @login_required
 def comment(id):
-    if request.method == 'POST':
-        body = request.form['body']
+    if request.method == 'POST': #yorum ekleme işlemleri 
+        body = request.form['body'] # eğer post değilse comment.html sayfasını açar 
         created=datetime.now().strftime('%Y-%m-%d')
         error = None
         
@@ -151,11 +157,11 @@ def comment(id):
                 (g.user['id'],id,created,body)
             )
             db.commit()
-            return redirect(url_for('forum.index'))
-    return render_template('forum/comment.html')
+            return redirect(url_for('forum.index'))  # yorum yaptıktan sonra ise forumun index sayfasına yönlendirir.
+    return render_template('forum/comment.html') 
 
 @bp.route('/<int:id>/close_comment',methods=['GET'])
-def close_comment(id):
+def close_comment(id): # Gelen forum'un id'si buraya gönderdik ve sql komutu ile aktiflik durumunu değiştirdik.
     db = get_db()
     db.execute(
         'UPDATE forum set is_active = 0'
