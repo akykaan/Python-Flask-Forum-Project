@@ -10,7 +10,9 @@
     <article class="post">
         <header>
           <div>
-            <div class="about">by {{ comment['body'] }} </div>
+            <div class="about">{{g.user['nickname']}} by {{ comment['body'] }} </div>
+            <a class="action" href="{{ url_for('forum.comment_delete', id=comment['id']) }}">Delete</a>
+            <a class="action" href="{{ url_for('forum.comment_edit', id=comment['id']) }}">Edit</a>
           </div>
         </header>
       </article>

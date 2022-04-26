@@ -72,10 +72,11 @@ def get_forum(id, check_author=True):
 
     if forum is None:
         abort(404, f"Forum id {id} doesn't exist.")
-
+    if g.user['authority']==1:
+        return forum
     if check_author and forum['user_id'] != g.user['id']:
         abort(403)
-
+    
     return forum
 
 
@@ -83,7 +84,7 @@ def get_forum(id, check_author=True):
 def get_comment(id):
     db=get_db()      
     comments=db.execute(
-        'SELECT c.body'
+        'SELECT c.body,c.forum_id,c.id'
         ' FROM comment c INNER JOIN user u ON u.id=f.user_id'
         ' INNER JOIN forum f ON f.id=c.forum_id'
         ' WHERE c.forum_id = ?'
@@ -159,6 +160,40 @@ def close_comment(id):
     db.execute(
         'UPDATE forum set is_active = 0'
         ' WHERE forum.id=?',
+        (id,)
+    ).fetchone()
+    db.commit()
+    return redirect(url_for('forum.index'))
+
+@bp.route('/<int:id>/comment_edit',methods=['GET','POST'])
+def comment_edit(id):
+    if request.method == 'POST': 
+        body = request.form['body']
+        created=datetime.now().strftime('%Y-%m-%d')
+        error = None
+        
+        if not body:
+            error = 'Body is required.'
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                'UPDATE comment set body = ?, created = ?'
+                ' WHERE id=?',
+                (body,created,id,)
+            ).fetchone()
+            db.commit()
+            return redirect(url_for('forum.index'))
+    return render_template('forum/comment.html')
+
+@bp.route('/<int:id>/comment_delete',methods=['GET'])
+def comment_delete(id):
+    db = get_db()
+    db.execute(
+        'DELETE FROM comment'
+        ' WHERE id=?',
         (id,)
     ).fetchone()
     db.commit()

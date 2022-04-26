@@ -1,10 +1,12 @@
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS forum;
+DROP TABLE IF EXISTS comment;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nickname TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  authority BOOLEAN NOT NULL
 );
 
 CREATE TABLE forum (
@@ -25,13 +27,4 @@ CREATE TABLE comment(
   body TEXT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (forum_id) REFERENCES forum(id)
-);
-
-CREATE TABLE moderator (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  nickname TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL,
-  user_id INTEGER NOT NULL,
-  authority TEXT NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES user(id)
 );

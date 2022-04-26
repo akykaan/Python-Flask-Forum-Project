@@ -15,12 +15,13 @@
     <article class="post">
       <h1> forum_id: {{forum['id']}} </h1>
       <h1> is_close: {{forum['is_active']}} </h1>
+      <h1> authority: {{g.user['authority']}} </h1>
       <header>
         <div>
           <h1>{{ forum['title'] }}</h1>
           <div class="about">by {{ forum['username'] }} on {{ forum['created'].strftime('%Y-%m-%d') }}</div>
         </div>
-        {% if g.user['id'] == forum['user_id'] %}
+        {% if g.user['id'] == forum['user_id'] or g.user['authority']==1 %}
           <a class="action" href="{{ url_for('forum.update', id=forum['id']) }}">Edit</a>
         {% endif %}
       </header>
@@ -32,7 +33,7 @@
         {% if forum['is_active']==1 %}
           <a class="action" href="{{ url_for('forum.comment', id=forum['id']) }}">Comments Write</a>
         {% endif %}
-        {% if g.user['id']==forum['user_id'] %}
+        {% if g.user['id']==forum['user_id'] or g.user['authority']==1 %}
           <a class="action" id="close" href="{{ url_for('forum.close_comment', id=forum['id']) }}"  >Close to comments</a>
         {% endif %}  
     </div> 
