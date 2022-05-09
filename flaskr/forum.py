@@ -142,7 +142,7 @@ def comment(id):
         body = request.form['body'] # eğer post değilse comment.html sayfasını açar 
         created=datetime.now().strftime('%Y-%m-%d')
         error = None
-        
+          
         if not body:
             error = 'Body is required.'
 
