@@ -10,22 +10,21 @@ from flaskr.db import get_db
 bp = Blueprint('forum',__name__)
 
 
-
-@bp.route('/<int:id>/user_profile',methods=('GET','POST'))
-def profile(id):
+@bp.route('/user_profile',methods=['GET','POST'])
+def profile():
     db = get_db()
     users = db.execute(
         'SELECT id,nickname,password'
         ' FROM user u'
         ' WHERE u.id = ?',
-        (id,)
+        (g.user['id'],)
     ).fetchall()
 
     forums = db.execute(
         'SELECT f.title,f.body'
         ' FROM forum f JOIN user u ON f.user_id = u.id'
         ' WHERE u.id = ?',
-        (id,)
+        (g.user['id'],)
     ).fetchall()
     return render_template('profile/index.html',users=users,forums=forums)
 
@@ -35,11 +34,10 @@ def profile(id):
 def index():
     db = get_db()
     forums = db.execute(
-        'SELECT f.id,user_id,created,title,body,is_active'
-        ' FROM forum f '
+        'SELECT f.id,f.user_id,u.nickname,created,title,body,is_active'
+        ' FROM forum f JOIN user u ON f.user_id = u.id'
         ' ORDER BY created DESC'
     ).fetchall()
-
     return render_template('forum/index.html',forums=forums)
 
 
@@ -90,9 +88,10 @@ def get_forum(id, check_author=True):   # Verilen id ile ilgini forumun bilgiler
 def get_comment(id): # id ile hangi forumun yorumlarına gidildi onu öğrendik.
     db=get_db()      
     comments=db.execute(
-        'SELECT c.body,c.forum_id,c.id'
-        ' FROM comment c INNER JOIN user u ON u.id=f.user_id'
-        ' INNER JOIN forum f ON f.id=c.forum_id'
+        'SELECT c.body,c.forum_id,c.id,c.user_id,u.nickname'
+        ' FROM comment c'
+        ' INNER JOIN user u ON u.id = f.user_id'
+        ' INNER JOIN forum f ON u.id = c.user_id'
         ' WHERE c.forum_id = ?'
         ' ORDER BY c.id DESC',
         (id,) # id'yi burada kullanıp sql sorgusu ile çektik.
@@ -177,7 +176,7 @@ def comment_edit(id):
         body = request.form['body']
         created=datetime.now().strftime('%Y-%m-%d')
         error = None
-        
+        print(id)
         if not body:
             error = 'Body is required.'
 

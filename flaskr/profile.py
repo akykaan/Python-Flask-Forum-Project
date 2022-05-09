@@ -16,8 +16,9 @@ def profile():
 
 
 ### Kişiye özel profil sayfası editleme işlemi
-@bp.route('/<int:id>/edit',methods=('GET','POST'))
-def edit(id):
+@bp.route('/edit',methods=('GET','POST'))
+@login_required
+def edit():
     if request.method == 'POST':
         nickname = request.form['nickname']
         password = request.form['password']
@@ -48,6 +49,6 @@ def edit(id):
         'SELECT id,nickname,password'
         ' FROM user u'
         ' WHERE u.id = ?',
-        (id,)
+        (g.user['id'],)
     ).fetchall()
     return render_template('profile/edit.html',users=users)

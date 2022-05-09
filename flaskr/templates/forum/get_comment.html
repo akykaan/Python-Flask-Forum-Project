@@ -13,10 +13,12 @@
         <div class="d-flex w-100 justify-content-between"> 
           <h5 class="mb-1">{{ comment['body'] }}</h5>
           <hr />
-          <span>Written by {{g.user['nickname']}} </span>
+          <span>Written by {{ comment['nickname']}} </span>
         </div>
-        <p class="mb-1"><a href="{{ url_for('forum.comment_delete', id=comment['id']) }}">Delete</a></p>
-        <p class="mb-1"><a href="{{ url_for('forum.comment_edit', id=comment['id']) }}">Edit</a></p>
+        {% if g.user['id'] == comment['user_id'] or g.user['authority']==1 %}
+          <p class="mb-1"><a href="{{ url_for('forum.comment_delete', id=comment['id']) }}">Delete</a></p>
+          <p class="mb-1"><a href="{{ url_for('forum.comment_edit', id=comment['id']) }}">Edit</a></p>
+        {% endif %}
       </a>
     </div>
   </article>

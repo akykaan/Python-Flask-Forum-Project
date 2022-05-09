@@ -18,7 +18,7 @@
             <div class="d-flex bd-highlight mb-3">
               <div class="p-2 bd-highlight"><h1 class="display-3"> Foruma Hoş geldiniz.</h1></div>
               <div class="ms-auto p-2 bd-highlight">
-                <a class="btn btn-primary" href="{{ url_for('forum.profile', id=g.user['id'])  }}"> Profile</a>
+                <a class="btn btn-primary" href="{{ url_for('forum.profile') }}"> Profile</a>
                 {% if g.user %}
                   <a class="btn btn-primary" href="{{ url_for('forum.create') }}"> New</a>
                 {% endif %}
@@ -34,7 +34,7 @@
                 <div class="col-md-9">
                   {% for forum in forums %}
                     <i class="fa fa-book"><h4 class="body forum-item-title">{{ forum['title'] }}</h4></i>
-                    <div class="forum-sub-title">Written by {{ g.user['nickname'] }} on {{ forum['created'].strftime('%Y-%m-%d') }}</div>
+                    <div class="forum-sub-title">Written by {{forum['nickname']}} on {{ forum['created'].strftime('%Y-%m-%d') }}</div>
                     {% if g.user['id'] == forum['user_id'] or g.user['authority']==1 %}
                       <a class="fa fa-pencil-square-o " href="{{ url_for('forum.update', id=forum['id']) }}"> Edit</a>
                     {% endif %}

@@ -11,12 +11,11 @@
         <p class="body">nickname: {{ user['nickname'] }}</p>
         <p class="body">password: {{ user['password'] }}</p>
     {% endfor %}
-    <form method="post">
-        <label for="title">Nickname</label>
-        <input name="nickname" id="nickname" value="{{ request.form['nickname'] }}">
-        <label for="body">Password</label>
-        <input type="password" name="password" id="password" value="{{ request.form['password'] }}">
-        <input type="submit" value="Save">
-      </form>
-        
+        <form method="post">
+            <label for="title">Nickname</label>
+            <input name="nickname" id="nickname" value="{{ request.form['nickname'] }}">
+            <label for="body">Password</label>
+            <input type="password" name="password" id="password" value="{{ request.form['password'] }}">
+            <input type="submit" value="Save">
+        </form>
 {% endblock %}
