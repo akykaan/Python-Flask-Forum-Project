@@ -11,6 +11,10 @@
         <p class="body">nickname: {{ user['nickname'] }}</p>
         <p class="body">password: {{ user['password'] }}</p>
     {% endfor %}
+    {% if g.user['authority']==1 %}
+        <h3> moderatörün bilgileri değiştirilemez :) </h3>
+    {% endif %}
+    {% if g.user['authority']!=1 %}
         <form method="post">
             <label for="title">Nickname</label>
             <input name="nickname" id="nickname" value="{{ request.form['nickname'] }}">
@@ -18,4 +22,5 @@
             <input type="password" name="password" id="password" value="{{ request.form['password'] }}">
             <input type="submit" value="Save">
         </form>
+    {% endif %}
 {% endblock %}
