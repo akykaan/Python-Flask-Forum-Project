@@ -3,6 +3,7 @@
 Staj Başvuru sürecimde geliştirmiş olduğum python projesi
 
 Projenin Yapabildikleri:
+```
     1) Login ve Register sayfaları mevcut
     2) Register olan kişinin şifreleri şifreli şekilde tutuluyor.
     3) Herkes bir konu başlığı ve başlığa ait içerik girebilir.
@@ -12,7 +13,7 @@ Projenin Yapabildikleri:
     7) Her üyenin kendi profil sayfası mevcut.
     8) Her üye profil sayfasını editleyebiliyor.
     9) Her üye profil sayfasında açtığı başlıkları görebiliyor.
-
+```
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
