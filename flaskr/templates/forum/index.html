@@ -21,8 +21,9 @@
                 <a class="btn btn-primary" href="{{ url_for('forum.profile') }}"> Profile</a>
                 {% if g.user %}
                   <a class="btn btn-primary" href="{{ url_for('forum.create') }}"> New</a>
+                  <a class="btn btn-danger" href="{{ url_for('auth.logout') }}">Log Out</a>
+                  <br> 
                   <span>Hoş geldin {{ g.user['nickname'] }}</span> 
-                  <a class="btn btn-danger" href="{{ url_for('auth.logout') }}">Log Out</a> 
                 {% endif %}
               </div>
             </div>

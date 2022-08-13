@@ -1,6 +1,6 @@
 # Python-Flask-Forum-Project
 
-Staj Başvuru sürecimde geliştirmiş olduğum python projesi
+Staj Başvuru sürecimde benden istenenlere göre geliştirmiş olduğum python projesi
 
 Projenin Yapabildikleri:
 ```
@@ -8,11 +8,12 @@ Projenin Yapabildikleri:
     2) Register olan kişinin şifreleri şifreli şekilde tutuluyor.
     3) Herkes bir konu başlığı ve başlığa ait içerik girebilir.
     4) İsteyen üyeler açılan başlıklara yorum yapabilir.
-    5) Yapılan yorumları sadece yorumu yapan kişi veya moderator silebilir/düzenleyebilir.
-    6) Açılan başlıkları sadece o başlığı açan kişi yorumlara kapatabilir.
+    5) Yapılan yorumları sadece yorumu yapan kişi veya moderatör silebilir/düzenleyebilir.
+    6) Açılan başlıkları sadece o başlığı açan kişi veya moderatör yorumlara kapatabilir.
     7) Her üyenin kendi profil sayfası mevcut.
     8) Her üye profil sayfasını editleyebiliyor.
     9) Her üye profil sayfasında açtığı başlıkları görebiliyor.
+    10) Aklıma bir şeyler gelince eklerim zevkli iş :)
 ```
 ## Getting Started
 
@@ -50,9 +51,3 @@ Password:12345
 ### Links
 
 * [Documentation](https://flask.palletsprojects.com/en/2.1.x/) - Flask Documentations
-
-### Which technologies did I use in this project?
-
-1) Python
-2) Flask
-3) Bootstrap
