@@ -50,3 +50,9 @@ Password:12345
 ### Links
 
 * [Documentation](https://flask.palletsprojects.com/en/2.1.x/) - Flask Documentations
+
+### Which technologies did I use in this project?
+
+1) Python
+2) Flask
+3) Bootstrap

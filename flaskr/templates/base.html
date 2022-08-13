@@ -5,17 +5,18 @@
 
 
 {% block header %}{% endblock %}
-<nav>
+<!--  <nav>
   <ul>
     {% if g.user %}
-     <!-- <li><span>{{ g.user['nickname'] }}</span>-->
-      <!--<li class="list-inline-item"><a href="{{ url_for('auth.logout') }}">Log Out</a> -->
+      <li><span>{{ g.user['nickname'] }}</span>
+      <li class="list-inline-item"><a href="{{ url_for('auth.logout') }}">Log Out</a> 
     {% else %}
-     <!-- <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>  -->
+      <li><a href="{{ url_for('auth.register') }}">Register</a>
+      <li><a href="{{ url_for('auth.login') }}">Log In</a>  
     {% endif %}
   </ul>
 </nav>
+-->
 <section class="content">
   {% for message in get_flashed_messages() %}
     <div class="flash">{{ message }}</div>
