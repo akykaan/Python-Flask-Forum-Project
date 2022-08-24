@@ -197,10 +197,9 @@ def comment_edit(id):
 def comment_delete(id):
     db = get_db()
     db.execute(
-        'DELETE FROM comment'
-        ' WHERE id=?',
-        (id,)
+        'DELETE FROM comment '
+        'WHERE id=? AND user_id==?',
+        (id,g.user['id'])
     ).fetchone()
     db.commit()
     return redirect(url_for('forum.index'))
-
