@@ -38,16 +38,16 @@
                   {% for forum in forums %}
                     <i class="fa fa-book"><h4 class="body forum-item-title">{{ forum['title'] }}</h4></i>
                     <div class="forum-sub-title">Written by {{forum['nickname']}} on {{ forum['created'].strftime('%Y-%m-%d') }}</div>
-                    {% if g.user['id'] == forum['user_id'] or g.user['authority']==1 %}
+                    {% if g.user['id'] == forum['user_id'] or g.user['authority'] %}
                       <a class="fa fa-pencil-square-o " href="{{ url_for('forum.update', id=forum['id']) }}"> Edit</a>
                     {% endif %}
                     <p class="body forum-item-title"> {{ forum['body'] }}</p>
                     <div>
                       <a class="fa fa-comment" href="{{ url_for('forum.get_comment', id=forum['id']) }}"> Comments</a>
-                      {% if forum['is_active']==1 %}
+                      {% if forum['is_active'] %}
                         <a class="fa fa-pencil-square-o" href="{{ url_for('forum.comment', id=forum['id']) }}"> Comments Write</a>
                       {% endif %}
-                      {% if g.user['id']==forum['user_id'] or g.user['authority']==1 %}
+                      {% if (g.user['id']==forum['user_id'] or g.user['authority']) and forum['is_active'] %}
                         <a class="fa fa-times-circle" id="close" href="{{ url_for('forum.close_comment', id=forum['id']) }}"> Close to comments</a>
                       {% endif %}
                     </div> 

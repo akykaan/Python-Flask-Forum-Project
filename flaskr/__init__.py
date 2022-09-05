@@ -1,6 +1,8 @@
 import os
 from flask import Flask, redirect, url_for
 
+from flaskr.error import access_denied
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -28,12 +30,20 @@ def create_app(test_config=None):
     
     from . import db
     db.init_app(app)
+
     from . import auth
     app.register_blueprint(auth.bp)
+    
     from . import forum
     app.register_blueprint(forum.bp)
     app.add_url_rule('/', endpoint='index')
+    
     from . import profile
     app.register_blueprint(profile.bp)
-    app.add_url_rule('/',endpoint='profile')
+    app.add_url_rule('/', endpoint='profile')
+
+   
+    # error sayfaları
+    app.register_error_handler(403,access_denied)
+
     return app
