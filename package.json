@@ -1,10 +1,10 @@
 {
   "name": "python-flask-forum-project",
-  "version": "1.0.0",
+  "version": "3.9",
   "description": "Staj Başvuru sürecimde benden istenenlere göre geliştirmiş olduğum python projesi",
-  "main": "__init__.py",
+  "main": "wsgi.py",
   "scripts": {
-    "start": "vercel-build"
+    "start": "flask run"
   },
   "repository": {
     "type": "git",

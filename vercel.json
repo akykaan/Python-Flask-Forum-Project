@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "builds": [
+    "build": [
         {
             "src": "package.json",
             "use": "@vercel/static-build",
@@ -10,7 +10,7 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/flaskr/__init__.py"
+            "destination": "/"
         }
     ]
 }
