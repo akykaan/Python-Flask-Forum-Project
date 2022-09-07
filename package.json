@@ -4,7 +4,7 @@
   "description": "Staj Başvuru sürecimde benden istenenlere göre geliştirmiş olduğum python projesi",
   "main": "__init__.py",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "vercel-build"
   },
   "repository": {
     "type": "git",
