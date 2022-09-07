@@ -2,7 +2,7 @@
     "version": 2,
     "builds":[
         {
-            "src":"./wsgi.py",
+            "src":"./__init__.py",
             "use":"@vercel/python"
         }
     ],
