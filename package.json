@@ -1,0 +1,19 @@
+{
+  "name": "python-flask-forum-project",
+  "version": "1.0.0",
+  "description": "Staj Başvuru sürecimde benden istenenlere göre geliştirmiş olduğum python projesi",
+  "main": "wsgi.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akykaan/Python-Flask-Forum-Project.git"
+  },
+  "author": "akykaan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akykaan/Python-Flask-Forum-Project/issues"
+  },
+  "homepage": "https://github.com/akykaan/Python-Flask-Forum-Project#readme"
+}
