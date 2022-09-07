@@ -1,0 +1,6 @@
+{
+    "builds": [{
+        "src": "index.py",
+        "use": "@ardnt/vercel-python-wsgi"
+    }]
+}

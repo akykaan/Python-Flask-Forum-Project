@@ -3,14 +3,18 @@
     "builds": [
         {
             "src": "package.json",
-            "use": "@vercel/static-build",
-            "config":{"distDir":"dist"}
+            "use": "@ardnt/vercel-python-wsgi",
+            "config": {
+                "distDir": "dist",
+                "runtime": "python3.6",
+                "wsgiApplicationName": "application"
+            }
         }
     ],
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/"
+            "dest": "/wsgi.py"
         }
     ]
 }

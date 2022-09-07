@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/akykaan/Python-Flask-Forum-Project/issues"
   },
-  "homepage": "https://github.com/akykaan/Python-Flask-Forum-Project#readme"
+  "homepage": "https://github.com/akykaan/Python-Flask-Forum-Project#readme",
+  "dependencies": {
+    "@ardnt/vercel-python-wsgi": "^1.1.0"
+  }
 }
