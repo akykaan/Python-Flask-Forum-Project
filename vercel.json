@@ -14,7 +14,7 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "dest": "/wsgi.py"
+            "destination": "/wsgi.py"
         }
     ]
 }
