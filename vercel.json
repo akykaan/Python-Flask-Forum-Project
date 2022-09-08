@@ -17,7 +17,7 @@
             }
         }
     ],
-    "routes": [
+    "rewrites": [
         {
             "src": "/flaskr/static/(.*)",
             "dest": "/flaskr/static/$1"
