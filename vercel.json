@@ -2,19 +2,29 @@
     "version": 2,
     "builds": [
         {
-            "src": "package.json",
-            "use": "@ardnt/vercel-python-wsgi",
+            "src": "wsgi.py",
+            "use": "@vercel/python",
             "config": {
-                "distDir": "dist",
-                "runtime": "python3.6",
-                "wsgiApplicationName": "application"
+                "maxLambdaSize": "15mb",
+                "runtime": "python3.9"
+            }
+        },
+        {
+            "src": "build_files.sh",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "staticfiles_build"
             }
         }
     ],
-    "rewrites": [
+    "routes": [
         {
-            "source": "/(.*)",
-            "destination": "/wsgi.py"
+            "src": "/flaskr/static/(.*)",
+            "dest": "/flaskr/static/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/wsgi.py"
         }
     ]
 }
