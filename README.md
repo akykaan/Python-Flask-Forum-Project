@@ -13,7 +13,6 @@ Projenin Yapabildikleri:
     7) Her üyenin kendi profil sayfası mevcut.
     8) Her üye profil sayfasını editleyebiliyor.
     9) Her üye profil sayfasında açtığı başlıkları görebiliyor.
-    10) Aklıma bir şeyler gelince eklerim zevkli iş :)
 ```
 ## Getting Started
 
@@ -29,7 +28,7 @@ $ pip install -U Flask
 ### Running the project
 
 If you can't run it is my fault :).
-You can check the Heroku link: * [Heroku](https://python-project-flask.herokuapp.com/)
+You can check the Pythonanywhere link: * [Pythonanywhere](https://akykaan.pythonanywhere.com/auth/login)
 
 You can log in with the nickname and password below for trial purposes.
 
@@ -43,7 +42,6 @@ Password:12345
 
 3) 
     set FLASK_APP=__init__.py
-    $env:FLASK_APP = "__init__.py"
     flask run
 
     Runnig on http://127.0.0.1:5000 (Press CTRL+C to quit)

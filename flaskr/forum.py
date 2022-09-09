@@ -7,6 +7,7 @@ from werkzeug.exceptions import abort
 from flaskr.auth import login_required
 from flaskr.db import get_db
 
+
 bp = Blueprint('forum',__name__)
 
 
@@ -66,6 +67,20 @@ def create():
             return redirect(url_for('forum.index')) # Post işleminden sonra bizi index fonksiyonuna gönderir ve açılan başlığı görmüş oluruz.
     return render_template('forum/create.html')
 
+
+def check_comment(id,check_author=True):
+    comment = get_db().execute(
+        'SELECT user_id'
+        ' FROM comment c JOIN user u ON c.user_id=u.id'
+        ' WHERE c.id=?',
+        (id,)
+    ).fetchone()
+
+    if check_author and comment['user_id']!=g.user['id']:
+        print("yetki yok")
+        abort(403)
+    return comment
+
 def get_forum(id, check_author=True):   # Verilen id ile ilgini forumun bilgilerini almak için 
     forum = get_db().execute(
         'SELECT f.id,user_id,created,title,body'
@@ -82,7 +97,6 @@ def get_forum(id, check_author=True):   # Verilen id ile ilgini forumun bilgiler
         abort(403)
     
     return forum
-
 
 @bp.route('/<int:id>/get_comment',methods=('GET','POST')) # Forumun sahip olduğu yorumları getirmek için 
 def get_comment(id): # id ile hangi forumun yorumlarına gidildi onu öğrendik.
@@ -129,11 +143,12 @@ def update(id):
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):  # Silinmesini istediğimiz forum'un id'sini buraya yollayıp onu sql komutu ile sildik
-    get_forum(id)
+    get_forum(id) # bir ara bakılacak
     db = get_db()
     db.execute('DELETE FROM forum WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('forum.index'))
+
 
 @bp.route('/<int:id>/comment',methods=['GET','POST'])
 @login_required
@@ -157,26 +172,29 @@ def comment(id):
             )
             db.commit()
             return redirect(url_for('forum.index'))  # yorum yaptıktan sonra ise forumun index sayfasına yönlendirir.
-    return render_template('forum/comment.html') 
+    return render_template('forum/comment.html')
+
 
 @bp.route('/<int:id>/close_comment',methods=['GET'])
+@login_required
 def close_comment(id): # Gelen forum'un id'si buraya gönderdik ve sql komutu ile aktiflik durumunu değiştirdik.
     db = get_db()
     db.execute(
         'UPDATE forum set is_active = 0'
-        ' WHERE forum.id=?',
-        (id,)
+        ' WHERE forum.id=? AND user_id=? IN (SELECT authority FROM user WHERE authority=1)',
+        (id,g.user['id'])
     ).fetchone()
     db.commit()
     return redirect(url_for('forum.index'))
 
 @bp.route('/<int:id>/comment_edit',methods=['GET','POST'])
+@login_required
 def comment_edit(id):
     if request.method == 'POST': 
         body = request.form['body']
         created=datetime.now().strftime('%Y-%m-%d')
         error = None
-        print(id)
+       
         if not body:
             error = 'Body is required.'
 
@@ -186,21 +204,24 @@ def comment_edit(id):
             db = get_db()
             db.execute(
                 'UPDATE comment set body = ?, created = ?'
-                ' WHERE id=?',
-                (body,created,id,)
+                ' WHERE id=? AND (user_id=? OR (SELECT authority FROM user WHERE authority=1))',
+                (body,created,id,g.user['id'])
             ).fetchone()
             db.commit()
             return redirect(url_for('forum.index'))
     return render_template('forum/comment.html')
 
 @bp.route('/<int:id>/comment_delete',methods=['GET'])
+@login_required
 def comment_delete(id):
+    check_comment(id)
     db = get_db()
     db.execute(
-        'DELETE FROM comment'
-        ' WHERE id=?',
+        'DELETE FROM comment ' 
+        'WHERE id=?',
         (id,)
     ).fetchone()
     db.commit()
+
     return redirect(url_for('forum.index'))
 
