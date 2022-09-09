@@ -20,13 +20,15 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-
+        authority=0 # default 0 all user value
+        if nickname=="moderator": # yes its bad
+            authority=1
         # üye olurken verilen nickname va password'ü alır ve password'ü hashler     
         if error is None:
             try:
                 db.execute(
                     "INSERT INTO user (nickname, password,authority) VALUES (?, ?, ?)",
-                    (nickname, generate_password_hash(password),0),
+                    (nickname, generate_password_hash(password),authority),
                 )
                 db.commit()
             except db.IntegrityError:

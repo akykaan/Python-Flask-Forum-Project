@@ -181,7 +181,7 @@ def close_comment(id): # Gelen forum'un id'si buraya gönderdik ve sql komutu il
     db = get_db()
     db.execute(
         'UPDATE forum set is_active = 0'
-        ' WHERE forum.id=? AND user_id=? IN (SELECT authority FROM user WHERE authority=1)',
+        ' WHERE forum.id=? AND (user_id=? OR (SELECT authority FROM user WHERE authority=1))',
         (id,g.user['id'])
     ).fetchone()
     db.commit()
